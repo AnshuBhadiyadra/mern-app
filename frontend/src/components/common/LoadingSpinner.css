@@ -1,0 +1,30 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  min-height: 200px;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent, #6366f1, #a855f7, #ec4899, transparent);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
+  animation: spinGlow 1s linear infinite;
+}
+
+@keyframes spinGlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-message {
+  margin-top: 1rem;
+  color: #888;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+}

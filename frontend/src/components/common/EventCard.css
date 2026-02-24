@@ -1,0 +1,220 @@
+/* EventCard Styles — Hyperplexed-inspired */
+.event-card {
+  background:
+    radial-gradient(
+      300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(99, 102, 241, 0.08),
+      transparent 60%
+    ),
+    rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+/* Animated gradient border on hover */
+.event-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1.5px;
+  background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #6366f1);
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: borderRotate 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes borderRotate {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.event-card:hover::before {
+  opacity: 1;
+}
+
+.event-card:hover {
+  transform: translateY(-4px) rotateX(2deg);
+  box-shadow:
+    0 8px 30px rgba(99, 102, 241, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Subtle shimmer glare on hover */
+.event-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.4) 45%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 55%
+  );
+  transform: translateX(-100%) rotate(0deg);
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  pointer-events: none;
+}
+
+.event-card:hover::after {
+  transform: translateX(30%) rotate(0deg);
+}
+
+.event-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-status-badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-draft { background: #f0f0f0; color: #666; }
+.badge-published { background: #e3f2fd; color: #1565c0; }
+.badge-ongoing { background: #e8f5e9; color: #2e7d32; }
+.badge-completed { background: #fff3e0; color: #e65100; }
+.badge-closed { background: #fce4ec; color: #c62828; }
+
+.event-type-badge {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.event-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.event-card-description {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.event-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.event-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.event-card-tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.event-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.7rem;
+  background: #f0f0ff;
+  color: #5c5caa;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+}
+
+.event-card-organizer {
+  font-size: 0.8rem;
+  color: #999;
+  font-style: italic;
+  margin: 0;
+}
+
+.event-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.6rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.event-fee {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.event-free {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.event-view-btn {
+  padding: 0.45rem 1.1rem;
+  background: linear-gradient(135deg, #1a1a2e, #0f3460);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.event-view-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.event-view-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.event-view-btn:hover::before {
+  opacity: 1;
+}
+
+.event-view-btn span {
+  position: relative;
+  z-index: 1;
+}

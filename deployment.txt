@@ -1,0 +1,3 @@
+Frontend URL: https://felicity-events.vercel.app
+Backend API URL: https://felicity-events-api.vercel.app
+Database: MongoDB Atlas
