@@ -1,3 +1,3 @@
-Frontend URL: https://felicity-events.vercel.app
-Backend API URL: https://felicity-events-api.vercel.app
+Frontend URL: https://das-mern-app-frontend-13nb1se0a-anshubhadiyadras-projects.vercel.app
+Backend API URL: https://dass-mern-app-backend-gww2elf9i-anshubhadiyadras-projects.vercel.app
 Database: MongoDB Atlas
