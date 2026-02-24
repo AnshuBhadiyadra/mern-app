@@ -2,25 +2,31 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+// On Vercel (production), use /tmp since filesystem is read-only
+const baseUploadDir = process.env.NODE_ENV === 'production' ? '/tmp' : path.join(__dirname, '..');
+
 // Ensure upload directories exist
 const uploadDirs = ['uploads/payments', 'uploads/registrations'];
 uploadDirs.forEach(dir => {
-  const fullPath = path.join(__dirname, '..', dir);
-  if (!fs.existsSync(fullPath)) {
-    fs.mkdirSync(fullPath, { recursive: true });
+  const fullPath = path.join(baseUploadDir, dir);
+  try {
+    if (!fs.existsSync(fullPath)) {
+      fs.mkdirSync(fullPath, { recursive: true });
+    }
+  } catch (e) {
+    // Ignore filesystem errors on read-only systems
   }
 });
 
 // Configure storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const baseDir = path.join(__dirname, '..');
     if (file.fieldname === 'paymentProof') {
-      cb(null, path.join(baseDir, 'uploads/payments/'));
+      cb(null, path.join(baseUploadDir, 'uploads/payments/'));
     } else if (file.fieldname === 'registrationFile') {
-      cb(null, path.join(baseDir, 'uploads/registrations/'));
+      cb(null, path.join(baseUploadDir, 'uploads/registrations/'));
     } else {
-      cb(null, path.join(baseDir, 'uploads/'));
+      cb(null, path.join(baseUploadDir, 'uploads/'));
     }
   },
   filename: function (req, file, cb) {
