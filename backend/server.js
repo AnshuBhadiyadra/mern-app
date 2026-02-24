@@ -4,9 +4,6 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./config/db');
 
-// Connect to database
-connectDB();
-
 const app = express();
 
 // Middleware
@@ -16,6 +13,16 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Ensure DB is connected before any API route
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Database connection failed' });
+  }
+});
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -65,6 +72,9 @@ if (process.env.NODE_ENV !== 'production') {
   const http = require('http');
   const { Server } = require('socket.io');
   const setupDiscussionSocket = require('./sockets/discussionSocket');
+
+  // Connect eagerly for local dev
+  connectDB();
 
   const server = http.createServer(app);
   const io = new Server(server, {
