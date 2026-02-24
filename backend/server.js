@@ -2,27 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const http = require('http');
-const { Server } = require('socket.io');
 const connectDB = require('./config/db');
-const setupDiscussionSocket = require('./sockets/discussionSocket');
 
 // Connect to database
 connectDB();
 
 const app = express();
-const server = http.createServer(app);
-
-// Socket.IO setup
-const io = new Server(server, {
-  cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    methods: ['GET', 'POST'],
-  },
-});
-
-// Setup discussion socket
-setupDiscussionSocket(io);
 
 // Middleware
 app.use(cors({
@@ -75,11 +60,27 @@ app.use((req, res) => {
   res.status(404).json({ success: false, error: 'Route not found' });
 });
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+// Only listen locally — Vercel handles this in production
+if (process.env.NODE_ENV !== 'production') {
+  const http = require('http');
+  const { Server } = require('socket.io');
+  const setupDiscussionSocket = require('./sockets/discussionSocket');
+
+  const server = http.createServer(app);
+  const io = new Server(server, {
+    cors: {
+      origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+      methods: ['GET', 'POST'],
+    },
+  });
+  setupDiscussionSocket(io);
+
+  const PORT = process.env.PORT || 5000;
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
+}
 
 // Export for Vercel serverless
 module.exports = app;
